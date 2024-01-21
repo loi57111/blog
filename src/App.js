@@ -13,6 +13,8 @@ function App() {
   // 모달창 state
   let [modal, setModal] = useState(false);
 
+  let [title, setTitle] = useState(0);
+
   return (
     <div className="App">
       <div className="black-nav">
@@ -45,6 +47,7 @@ function App() {
             <h4
               onClick={() => {
                 setModal(!modal);
+                setTitle(i);
               }}
             >
               {글제목[i]}
@@ -69,7 +72,7 @@ function App() {
         // props로 부모 -> 자식 state 전송하는 법
         // 1. 자식컴포넌트 사용하는 곳에 가서 <자식컴포넌트 작명={state이름} />
         // 2. 자식컴포넌트 만드는 function으로 가서 props라는 파라미터 등록 후 props.작명 사용
-        modal == true ? <Modal 글제목={글제목} 글제목변경={글제목변경} /> : null
+        modal == true ? <Modal 글제목={글제목} title={title} /> : null
       }
     </div>
   );
@@ -81,18 +84,10 @@ function Modal(props) {
     <>
       <div className="modal">
         {/* props.작명 */}
-        <h4>{props.글제목[0]}</h4>
+        <h4>{props.글제목[props.title]}</h4>
         <p>날짜</p>
         <p>상세내용</p>
-        <button
-          onClick={() => {
-            let copy = [...props.글제목];
-            copy[0] = "여자 코트 추천";
-            props.글제목변경(copy);
-          }}
-        >
-          글수정
-        </button>
+        <button>글수정</button>
       </div>
     </>
   );
