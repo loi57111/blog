@@ -8,10 +8,7 @@ function App() {
     "강남 우동맛집",
     "파이썬 독학",
   ]);
-  let [따봉, 따봉변경] = useState([0,0,0]);
-  
- 
- 
+  let [따봉, 따봉변경] = useState([0, 0, 0]);
 
   // 모달창 state
   let [modal, setModal] = useState(false);
@@ -40,52 +37,26 @@ function App() {
         글수정
       </button>
 
-      {/* <div className="list">
-        <h4>
-          {글제목[0]}
-          <span
-            onClick={() => {
-              따봉변경(따봉 + 1);
-            }}
-          >
-            👍🏻
-          </span>
-          {따봉}
-        </h4>
-        <p>2월 17일 발행</p>
-      </div>
-
-      <div className="list">
-        <h4>{글제목[1]}</h4>
-        <p>2월 17일 발행</p>
-      </div>
-
-      <div className="list">
-        <h4
-          onClick={() => {
-            setModal(!modal);
-          }}
-          // My answer
-          // onClick={() => {
-          //   modal == false ? setModal(true) : setModal(false);
-          // }}
-        >
-          {글제목[2]}
-        </h4>
-        <p>2월 17일 발행</p>
-      </div> */}
-      
-      {
-        글제목.map(function (a,i) { //a는 파라미터,i는 카운터
+      {글제목.map(function (a, i) {
+        //a는 Array 안 데이터, i는 카운터(인덱스)
         return (
+          //반복문 돌때 key값을 지정해줌
           <div className="list" key={i}>
-            <h4 onClick={() => { setModal(!modal); }}>{글제목[i]}
-              <span onClick={() => {
-                let copy = [...따봉];
-                copy[i] = copy[i] + 1;
-                따봉변경(copy)
-                
-              }}>👍🏻</span>
+            <h4
+              onClick={() => {
+                setModal(!modal);
+              }}
+            >
+              {글제목[i]}
+              <span
+                onClick={() => {
+                  let copy = [...따봉];
+                  copy[i] += 1;
+                  따봉변경(copy);
+                }}
+              >
+                👍🏻
+              </span>
               {따봉[i]}
             </h4>
             <p>2월 17일 발행</p>
@@ -95,20 +66,33 @@ function App() {
 
       {
         // 모달 조건문
-        modal == true ? <Modal /> : null
+        // props로 부모 -> 자식 state 전송하는 법
+        // 1. 자식컴포넌트 사용하는 곳에 가서 <자식컴포넌트 작명={state이름} />
+        // 2. 자식컴포넌트 만드는 function으로 가서 props라는 파라미터 등록 후 props.작명 사용
+        modal == true ? <Modal 글제목={글제목} 글제목변경={글제목변경} /> : null
       }
     </div>
   );
 }
 
-function Modal() {
+function Modal(props) {
   return (
     // 의미없는 div대신 쓸수있다.
     <>
       <div className="modal">
-        <h4>제목</h4>
+        {/* props.작명 */}
+        <h4>{props.글제목[0]}</h4>
         <p>날짜</p>
         <p>상세내용</p>
+        <button
+          onClick={() => {
+            let copy = [...props.글제목];
+            copy[0] = "여자 코트 추천";
+            props.글제목변경(copy);
+          }}
+        >
+          글수정
+        </button>
       </div>
     </>
   );
